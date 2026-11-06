@@ -1,0 +1,621 @@
+/* ============================================
+   AI DJ App — Dark Neon DJ Console Theme
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --bg-dark: #05060f;
+  --bg-panel: #0a0d1a;
+  --bg-card: #0f1328;
+  --bg-card2: #131730;
+  --accent-cyan: #00f5ff;
+  --accent-orange: #ff6b35;
+  --accent-purple: #7c3aed;
+  --accent-pink: #ff006e;
+  --text-primary: #e8eaf6;
+  --text-secondary: #8892b0;
+  --border: rgba(255,255,255,0.07);
+  --glow-cyan: 0 0 20px rgba(0,245,255,0.3);
+  --glow-orange: 0 0 20px rgba(255,107,53,0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===================== HEADER ===================== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.logo-icon { font-size: 1.5rem; }
+.logo-text { color: var(--text-primary); }
+.logo-accent { color: var(--accent-cyan); text-shadow: var(--glow-cyan); }
+
+.beat-indicator {
+  font-size: 2rem;
+  color: var(--accent-cyan);
+  transition: transform 0.05s ease, color 0.05s;
+  opacity: 0.4;
+}
+.beat-indicator.pulse {
+  transform: scale(1.5);
+  opacity: 1;
+  color: var(--accent-cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+.status-live {
+  color: #00ff88;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  animation: blink 1s infinite;
+}
+.status-idle {
+  color: var(--text-secondary);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===================== SPECTRUM ===================== */
+.spectrum-wrapper {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.spectrum-canvas {
+  width: 100%;
+  height: 120px;
+  display: block;
+  border-radius: 8px;
+}
+
+/* ===================== DECKS ROW ===================== */
+.decks-row {
+  display: grid;
+  grid-template-columns: 1fr 280px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* ===================== DECK ===================== */
+.deck {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.deck-a { --deck-color: var(--accent-cyan); }
+.deck-b { --deck-color: var(--accent-orange); }
+
+.deck-active {
+  border-color: var(--deck-color);
+  box-shadow: 0 0 30px rgba(0,245,255,0.1);
+}
+.deck-b.deck-active {
+  box-shadow: 0 0 30px rgba(255,107,53,0.1);
+}
+
+.deck-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: var(--deck-color);
+  text-shadow: 0 0 10px var(--deck-color);
+}
+
+.deck-info {
+  text-align: center;
+  width: 100%;
+}
+
+.deck-track-name {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  margin-bottom: 6px;
+}
+
+.deck-bpm {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+.bpm-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--deck-color);
+  text-shadow: 0 0 10px var(--deck-color);
+}
+.bpm-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+/* ===================== WAVEFORM ===================== */
+.waveform-container {
+  position: relative;
+  width: 100%;
+}
+.waveform-canvas {
+  width: 100%;
+  height: 80px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.3);
+}
+.waveform-label {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+}
+
+/* ===================== CENTER CONTROLS ===================== */
+.center-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.master-vol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+.vol-slider {
+  -webkit-appearance: slider-vertical;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 28px;
+  height: 80px;
+  accent-color: var(--accent-purple);
+  cursor: pointer;
+}
+
+/* ===================== TRANSPORT BUTTONS ===================== */
+.transport-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 700;
+  width: 100%;
+}
+
+.btn-play {
+  background: linear-gradient(135deg, #00f5ff22, #00f5ff44);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  text-shadow: var(--glow-cyan);
+}
+.btn-play:hover {
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-stop {
+  background: linear-gradient(135deg, #ff006e22, #ff006e44);
+  border: 1px solid var(--accent-pink);
+  color: var(--accent-pink);
+}
+.btn-stop:hover {
+  background: var(--accent-pink);
+  color: #fff;
+}
+
+.btn-skip {
+  background: linear-gradient(135deg, #7c3aed22, #7c3aed44);
+  border: 1px solid var(--accent-purple);
+  color: #a78bfa;
+}
+.btn-skip:hover:not(:disabled) {
+  background: var(--accent-purple);
+  color: #fff;
+}
+.btn-skip:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===================== CROSSFADER ===================== */
+.crossfader-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.crossfader-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.deck-a { color: var(--accent-cyan); }
+.deck-b { color: var(--accent-orange); }
+
+.crossfader-track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.crossfader-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--accent-cyan), #333, var(--accent-orange));
+  outline: none;
+  cursor: pointer;
+}
+.crossfader-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: grab;
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+.crossfader-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+.crossfader-markers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+}
+
+/* ===================== FX PANEL ===================== */
+.effects-panel {
+  width: 100%;
+}
+.effects-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.effects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.fx-btn {
+  padding: 10px 4px;
+  border: 1px solid var(--fx-color);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--fx-color) 10%, transparent);
+  color: var(--fx-color);
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.1s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-align: center;
+}
+.fx-btn:hover:not(:disabled) {
+  background: var(--fx-color);
+  color: #000;
+  box-shadow: 0 0 12px var(--fx-color);
+  transform: scale(1.05);
+}
+.fx-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+.fx-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* ===================== BOTTOM ROW ===================== */
+/* Grid layout is defined in sources.css */
+
+.bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===================== UPLOADER ===================== */
+.uploader {
+  border: 2px dashed rgba(0,245,255,0.3);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.uploader:hover:not(.disabled) {
+  border-color: var(--accent-cyan);
+  background: rgba(0,245,255,0.05);
+  box-shadow: 0 0 20px rgba(0,245,255,0.1);
+}
+.uploader.dragging {
+  border-color: var(--accent-cyan);
+  background: rgba(0,245,255,0.1);
+  transform: scale(1.02);
+  box-shadow: var(--glow-cyan);
+}
+.uploader.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.uploader-icon { font-size: 2rem; }
+.uploader-text {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.uploader-hint {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+.loading-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-panel);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+}
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0,245,255,0.3);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================== TRACK LIST ===================== */
+.tracklist {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 200px;
+}
+.tracklist-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.tracklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.tracklist-items::-webkit-scrollbar { width: 4px; }
+.tracklist-items::-webkit-scrollbar-track { background: transparent; }
+.tracklist-items::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.tracklist-empty {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 20px;
+}
+.tracklist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+.tracklist-item.active {
+  border-color: rgba(0,245,255,0.3);
+  background: rgba(0,245,255,0.05);
+}
+.track-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  min-width: 20px;
+}
+.track-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+}
+.track-bpm {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--accent-purple);
+}
+.track-dur {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+.deck-badge {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.deck-a-badge { background: rgba(0,245,255,0.2); color: var(--accent-cyan); }
+.deck-b-badge { background: rgba(255,107,53,0.2); color: var(--accent-orange); }
+
+/* ===================== DJ LOG ===================== */
+.dj-log {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.log-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.log-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.log-entry {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.4;
+}
+.log-entry:last-child {
+  color: var(--text-primary);
+}
+
+/* ===================== SCROLLBAR ===================== */
+.log-entries::-webkit-scrollbar { width: 4px; }
+.log-entries::-webkit-scrollbar-track { background: transparent; }
+.log-entries::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  .decks-row {
+    grid-template-columns: 1fr;
+  }
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+  .center-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
